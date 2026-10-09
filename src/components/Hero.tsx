@@ -124,7 +124,7 @@ export default function Hero({ onPickCategory }: HeroProps) {
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
           {[
             { n: '01', t: 'Tell us your needs', d: 'Pick a category, set your budget, choose a use case and the features that matter most.', icon: SlidersIcon },
-            { n: '02', t: 'AI analyzes the market', d: 'We scrape live listings and pass them to Gemini to parse specs and score every match.', icon: BrainIcon },
+            { n: '02', t: 'AI analyzes the market', d: 'Gemini AI generates personalized tech recommendations based on user preferences and budget.', icon: BrainIcon },
             { n: '03', t: 'Compare your top 3', d: 'Get three tailored picks with a side-by-side comparison matrix and a "Why this fits you" tag.', icon: TrophyIcon },
           ].map((step, idx) => (
             <motion.div
