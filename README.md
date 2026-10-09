@@ -19,7 +19,7 @@
 
 - **Frontend**: [React 18](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
 - **Styling & Motion**: [Tailwind CSS](https://tailwindcss.com/), [Framer Motion](https://www.framer.com/motion/), [Lucide React](https://lucide.dev/)
-- **Backend & Database**: [Firebase](https://firebase.google.com/) (Authentication & Firestore)
+- **Backend & Database**: [Firebase](https://firebase.google.com/) (Authentication & Firestore), Python, FastAPI
 - **AI Integration**: [Google Gemini API](https://ai.google.dev/)
 
 ---
