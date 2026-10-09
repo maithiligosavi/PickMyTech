@@ -9,6 +9,7 @@ interface ResultsProps {
   budget?: number;
   useCase?: UseCase | string;
   fallbackInfo?: BudgetValidationResult;
+  notice?: string;
   onRestart: () => void;
   onRefine: () => void;
   onExploreFloor?: (price: number) => void;
@@ -28,6 +29,7 @@ export default function Results({
   budget = 0,
   useCase,
   fallbackInfo,
+  notice,
   onRestart,
   onRefine,
   onExploreFloor,
@@ -128,6 +130,13 @@ export default function Results({
           Ranked by how well each device matches your budget, use case, and priorities.
         </p>
       </motion.div>
+
+      {/* Notice */}
+      {notice && (
+        <div className="mb-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-3 text-center font-display text-sm font-semibold text-amber-200">
+          {notice}
+        </div>
+      )}
 
       {/* Cards */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">

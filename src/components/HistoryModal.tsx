@@ -30,17 +30,19 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
   useEffect(() => {
     if (!isOpen) return;
 
+    if (!user?.uid) {
+      setHistory([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     const fetchHistory = async () => {
       setLoading(true);
       setError(null);
       try {
         const recRef = collection(db, 'recommendations');
-        let q;
-        if (user?.uid) {
-          q = query(recRef, where('userId', '==', user.uid), limit(25));
-        } else {
-          q = query(recRef, limit(25));
-        }
+        const q = query(recRef, where('userId', '==', user.uid), limit(25));
 
         const snapshot = await getDocs(q);
         const docs: HistoryRecord[] = [];
@@ -60,8 +62,8 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
         docs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         setHistory(docs);
       } catch (err: any) {
-        console.error('Error fetching recommendation history from Firestore:', err);
-        setError('Failed to load recommendation history from Firestore.');
+        console.error('Error fetching recommendation history', err);
+        setError('Failed to load recommendation history.');
       } finally {
         setLoading(false);
       }
@@ -105,7 +107,7 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
             {loading && (
               <div className="py-12 text-center text-slate-400">
                 <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-                <p className="mt-3 text-sm">Fetching recommendation history from Firestore...</p>
+                <p className="mt-3 text-sm">Fetching recommendation history...</p>
               </div>
             )}
 
@@ -121,7 +123,7 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                 <Clock className="mx-auto h-10 w-10 text-slate-600 mb-3" />
                 <p className="font-medium text-slate-300">No saved search history found</p>
                 <p className="text-xs text-slate-500 mt-1">
-                  Run an AI recommendation search to save results to Firestore.
+                  Run an AI recommendation search to save results.
                 </p>
               </div>
             )}

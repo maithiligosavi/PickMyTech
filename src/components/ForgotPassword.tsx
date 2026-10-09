@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { friendlyAuthError } from '@/lib/authErrors';
 import { Mail, ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react';
 
 interface ForgotPasswordProps {
@@ -22,8 +23,8 @@ export default function ForgotPassword({ onBackToLogin }: ForgotPasswordProps) {
     try {
       await sendPasswordResetEmail(auth, email);
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || 'Failed to reset password');
+    } catch (err: unknown) {
+      setError(friendlyAuthError(err));
     } finally {
       setLoading(false);
     }

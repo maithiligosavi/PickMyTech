@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Brain, Target, CheckCircle2, Loader2 } from 'lucide-react';
 
 const STAGES = [
-  { icon: Search, label: 'Scraping live market data...', sub: 'Fetching listings from tech aggregators' },
+  { icon: Search, label: 'Analysing device specifications...', sub: 'Comparing models available in India' },
   { icon: Brain, label: 'Evaluating hardware specs with Gemini...', sub: 'Parsing specifications & scoring devices' },
   { icon: Target, label: 'Matching preferences...', sub: 'Ranking top candidates for your needs' },
   { icon: CheckCircle2, label: 'Finalizing your top 3', sub: 'Building tailored rationale for each pick' },
@@ -75,22 +75,20 @@ export default function AIThinking({ category, budget }: AIThinkingProps) {
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.05 * idx }}
-              className={`flex items-center gap-3 rounded-xl border p-3 transition-all duration-300 ${
-                state === 'active'
-                  ? 'border-cyan-400/40 bg-cyan-400/[0.06]'
-                  : state === 'done'
-                    ? 'border-white/10 bg-white/[0.02]'
-                    : 'border-white/[0.04] bg-transparent opacity-40'
-              }`}
+              className={`flex items-center gap-3 rounded-xl border p-3 transition-all duration-300 ${state === 'active'
+                ? 'border-cyan-400/40 bg-cyan-400/[0.06]'
+                : state === 'done'
+                  ? 'border-white/10 bg-white/[0.02]'
+                  : 'border-white/[0.04] bg-transparent opacity-40'
+                }`}
             >
               <div
-                className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${
-                  state === 'done'
-                    ? 'bg-emerald-400/15 text-emerald-300'
-                    : state === 'active'
-                      ? 'bg-cyan-400/15 text-cyan-300'
-                      : 'bg-white/[0.04] text-slate-500'
-                }`}
+                className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${state === 'done'
+                  ? 'bg-emerald-400/15 text-emerald-300'
+                  : state === 'active'
+                    ? 'bg-cyan-400/15 text-cyan-300'
+                    : 'bg-white/[0.04] text-slate-500'
+                  }`}
               >
                 {state === 'active' ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -102,9 +100,8 @@ export default function AIThinking({ category, budget }: AIThinkingProps) {
               </div>
               <div className="min-w-0">
                 <div
-                  className={`text-sm font-medium ${
-                    state === 'pending' ? 'text-slate-500' : 'text-slate-200'
-                  }`}
+                  className={`text-sm font-medium ${state === 'pending' ? 'text-slate-500' : 'text-slate-200'
+                    }`}
                 >
                   {stage.label}
                 </div>

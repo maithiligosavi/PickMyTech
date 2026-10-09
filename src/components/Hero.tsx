@@ -51,7 +51,7 @@ export default function Hero({ onPickCategory }: HeroProps) {
         </h1>
 
         <p className="mx-auto mt-5 max-w-2xl text-base text-slate-400 sm:text-lg text-balance">
-          PickMyTech scrapes live market data, evaluates real hardware specs with Gemini AI,
+          PickMyTech evaluates real hardware specs with Gemini AI,
           and recommends the top 3 devices that fit your budget and needs — with a tailored
           rationale for each.
         </p>

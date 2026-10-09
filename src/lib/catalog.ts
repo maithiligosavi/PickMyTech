@@ -31,6 +31,7 @@ export interface BudgetValidationResult {
 export interface RecommendationResponse {
   top_3_devices: Device[];
   fallback_info?: BudgetValidationResult;
+  notice?: string;
 }
 
 export interface SubCategoryFloor {
@@ -491,11 +492,13 @@ export function getRecommendations(
   const range = CATEGORY_RANGES[normCatKey] || CATEGORY_RANGES['Laptops'];
   const [start, end] = range;
   const allCategoryDevices = CATALOG.slice(start, end);
-  let candidatePool = allCategoryDevices.filter((d) => d.price <= budget);
+  const candidatePool = allCategoryDevices.filter((d) => d.price <= budget);
 
-  if (candidatePool.length < 3) {
-    // Sort by price ascending so user gets closest choices near starting price
-    candidatePool = [...allCategoryDevices].sort((a, b) => Math.abs(a.price - budget) - Math.abs(b.price - budget));
+  if (candidatePool.length === 0) {
+    return {
+      top_3_devices: [],
+      fallback_info: validation,
+    };
   }
 
   const scored = candidatePool.map((d) => {
@@ -528,7 +531,15 @@ export function getRecommendations(
     };
   });
 
-  return { top_3_devices: devices };
+  let notice: string | undefined;
+  if (candidatePool.length < 3) {
+    notice =
+      candidatePool.length === 1
+        ? 'Only 1 device fits this budget'
+        : `Only ${candidatePool.length} devices fit this budget`;
+  }
+
+  return { top_3_devices: devices, notice };
 }
 
 function buildWhyFitsYou(

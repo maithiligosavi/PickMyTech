@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
+import { friendlyAuthError } from '@/lib/authErrors';
 import { Mail, Lock, ArrowRight, Loader2, Cpu, Sparkles } from 'lucide-react';
 
 interface LoginProps {
@@ -39,8 +40,8 @@ export default function Login({ onBack, onForgotPassword }: LoginProps) {
         await signInWithEmailAndPassword(auth, email, password);
       }
       onBack(); // Go back home on success
-    } catch (err: any) {
-      setError(err.message || 'Authentication failed');
+    } catch (err: unknown) {
+      setError(friendlyAuthError(err));
     } finally {
       setLoading(false);
     }

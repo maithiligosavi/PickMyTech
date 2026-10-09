@@ -27,6 +27,7 @@ class RecommendationRequest(BaseModel):
     category: str
     budget: float
     use_case: str
+    priorities: list[str] = []
     brand_pref: str = "Any"
 
 # Output Schemas for Gemini Structured Response
@@ -177,6 +178,7 @@ def get_recommendations(req: RecommendationRequest):
     Otherwise, select the top 3 best {req.category} currently available in the Indian market that fit these criteria:
     - Budget limit: ₹{req.budget} INR (CRITICAL: Every product's estimated price MUST be less than or equal to ₹{req.budget} INR)
     - Primary Use Case: {req.use_case}
+    - Feature priorities: {", ".join(req.priorities) if req.priorities else "None"}
     - Brand Preference: {req.brand_pref}
 
     Ensure exact product names, realistic market prices in INR, and key specifications.
@@ -196,6 +198,8 @@ def get_recommendations(req: RecommendationRequest):
             )
             result = response.parsed
             if result:
+                if result.recommendations:
+                    result.recommendations = [rec for rec in result.recommendations if rec.estimated_price_inr <= req.budget]
                 return result
         except Exception as e:
             last_exception = e

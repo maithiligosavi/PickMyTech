@@ -96,6 +96,7 @@ export default function App() {
             category: state.category,
             budget: state.budget,
             use_case: state.useCase,
+            priorities: state.priorities,
             brand_pref: 'Any',
           }),
         });
@@ -135,6 +136,13 @@ export default function App() {
               ],
             }));
             recs = { top_3_devices: devices };
+          } else {
+            recs = getRecommendations(
+              state.category,
+              state.budget,
+              state.useCase,
+              state.priorities,
+            );
           }
         } else {
           recs = getRecommendations(
@@ -157,28 +165,30 @@ export default function App() {
       setPhase('results');
 
       // Save recommendation query and full results to Firestore
-      try {
-        await addDoc(collection(db, 'recommendations'), {
-          userId: user?.uid || 'anonymous',
-          userEmail: user?.email || 'anonymous',
-          category: state.category,
-          budget: state.budget,
-          useCase: state.useCase,
-          priorities: state.priorities,
-          brandPref: 'Any',
-          recommendationsCount: recs.top_3_devices.length,
-          results: recs.top_3_devices.map((d) => ({
-            name: d.name,
-            price: d.price,
-            specs: d.specs || {},
-            why_fits_you: d.why_fits_you || '',
-            matchScore: d.matchScore || 90,
-            highlights: d.highlights || [],
-          })),
-          timestamp: new Date().toISOString(),
-        });
-      } catch (firestoreError) {
-        console.error("Firestore Error:", firestoreError);
+      if (user?.uid) {
+        try {
+          await addDoc(collection(db, 'recommendations'), {
+            userId: user.uid,
+            userEmail: user.email || '',
+            category: state.category,
+            budget: state.budget,
+            useCase: state.useCase,
+            priorities: state.priorities,
+            brandPref: 'Any',
+            recommendationsCount: recs.top_3_devices.length,
+            results: recs.top_3_devices.map((d) => ({
+              name: d.name,
+              price: d.price,
+              specs: d.specs || {},
+              why_fits_you: d.why_fits_you || '',
+              matchScore: d.matchScore || 90,
+              highlights: d.highlights || [],
+            })),
+            timestamp: new Date().toISOString(),
+          });
+        } catch (firestoreError) {
+          console.error("Firestore Error:", firestoreError);
+        }
       }
     };
 
@@ -263,6 +273,7 @@ export default function App() {
                 budget={form.budget}
                 useCase={form.useCase}
                 fallbackInfo={results.fallback_info}
+                notice={results.notice}
                 onExploreFloor={(floorPrice) => handleSubmit({ ...form, budget: floorPrice })}
                 onRestart={goHome}
                 onRefine={refine}
